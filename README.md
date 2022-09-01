@@ -4,7 +4,7 @@
 
 ```
 pip3 install ecdsa
-pip3 install ecies
+pip3 install eciespy
 ```
 
 ### Run the following command to run the code
