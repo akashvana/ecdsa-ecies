@@ -6,11 +6,10 @@ import json
 from os import path 
 import binascii
 
-# ADMIN PUBLIC KEY
-# ADMIN_PRIVATE_KEY = "0x8c84d32cc09a04f8b3d9d8c766f647267bf59b9691c693d45cfad80c0e60808c"
 
 print("This is the page that will open for new users")
 print("Since you are a new user, we will generate your public keys and private keys")
+
 # generates public and private key pair for the user: 
 priv_key = generate_eth_key()
 priv_key_hex = priv_key.to_hex()
@@ -41,8 +40,6 @@ sk = SigningKey.generate(curve= SECP256k1) #gives SigningKey object
 readable_sk = sk.to_string().hex() 
 pk = sk.get_verifying_key() #public key corresponding to private key
 readable_pk = pk.to_string().hex()
-
-# we will also have to generate a public key and a private key for encrypting and decrypting the message
 
 for user in users:
     user['user_name'] = user_name
@@ -76,9 +73,3 @@ with open(user_path, 'w') as f:
 
 
 print("Registration completed")
-
-
-
-
-
-# once the public and private keys for the user have been generate, we need to store the public key in
