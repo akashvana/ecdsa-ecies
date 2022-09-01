@@ -7,6 +7,8 @@ from os import path
 
 print("This is the page that will open for the people in the organization if they have already registered")
 
+
+# user details which will be used to access the user details 
 user_name = input("Enter the username that you used to register: ")
 user_id = input("Enter the user id used during registration: ")
 
@@ -17,11 +19,7 @@ with open(file_name, "r") as file:
 
 ADMIN_PUBLIC_KEY = "0x81945326ddff050bfde04840593a3c84ea22f93427d0cb3e0d33a1097f8e0e10558d3893bf0ddffa4287fc2b9ff5aa75b042fff77d5c3863e22af8220e4c25fa"
 
-
-# sends a message to the admin for verification:
-
-# message = b"Some plain-text for encryption"
-
+# message which will be sent by the user and encrypted
 message = input("Enter the string that you want to encrypt and send to the admin")
 message = bytes(message, 'utf-8')
 
