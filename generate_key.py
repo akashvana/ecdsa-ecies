@@ -11,65 +11,81 @@ print("This is the page that will open for new users")
 print("Since you are a new user, we will generate your public keys and private keys")
 
 # generates public and private key pair for the user: 
-priv_key = generate_eth_key()
-priv_key_hex = priv_key.to_hex()
-pub_key_hex = priv_key.public_key.to_hex()
 
-users = [
-    {
-        "user_name": "",
-        "user_id": "",
-        "verifying_key": "",
-        "public_key": ""
-    }
-]
+def check_user_exists(user_name, user_id):
 
-user_details = {
-        "signing_key": "",
-        "verifying_key": "",
-        "private_key": "",
-        "public_key": ""
-    }
+    my_path = "users.json"
 
-# can have more fields for registering the user to the organization. 
-user_name = input("Enter your username: \n")
-user_id = input("Enter your userId: \n")
+    if path.exists(my_path):
+        with open(my_path , 'r') as file:
+            previous_json = json.load(file)
+            for item in previous_json: 
+                if(item["user_id"] == user_id and str(item["user_name"]) == str(user_name)):
+                    return True
+                else: continue
+    
+    else: 
+        return False
 
-#generate a signing key and a verifying key for the given username and userID: 
-sk = SigningKey.generate(curve= SECP256k1) #gives SigningKey object
-readable_sk = sk.to_string().hex() 
-pk = sk.get_verifying_key() #public key corresponding to private key
-readable_pk = pk.to_string().hex()
-
-for user in users:
-    user['user_name'] = user_name
-    user['user_id'] = user_id
-    user['verifying_key'] = readable_pk
-    user['public_key'] = pub_key_hex
-
-user_details['signing_key'] = readable_sk
-user_details['verifying_key'] = readable_pk
-user_details['private_key'] = priv_key_hex
-user_details['public_key'] = pub_key_hex
+    return False
 
 
-# this is the json file that the admin will have from which it will validate the users 
-my_path = 'users.json'
+def generate_key(user_name, user_id): 
 
-if path.exists(my_path):
-    with open(my_path , 'r') as file:
-        previous_json = json.load(file)
-        users = previous_json + users
-        
-with open(my_path , 'w') as file:
-    json.dump(users, file, indent = 4)
+    # add checks to make sure that the user_id does not exist already
+
+    priv_key = generate_eth_key()
+    priv_key_hex = priv_key.to_hex()
+    pub_key_hex = priv_key.public_key.to_hex()
+
+    users = [
+        {
+            "user_name": "",
+            "user_id": "",
+            "verifying_key": "",
+            "public_key": ""
+        }
+    ]
+
+    user_details = {
+            "signing_key": "",
+            "verifying_key": "",
+            "private_key": "",
+            "public_key": ""
+        }
+
+    #generate a signing key and a verifying key for the given username and userID: 
+    sk = SigningKey.generate(curve= SECP256k1) #gives SigningKey object
+    readable_sk = sk.to_string().hex() 
+    pk = sk.get_verifying_key() #public key corresponding to private key
+    readable_pk = pk.to_string().hex()
+
+    for user in users:
+        user['user_name'] = user_name
+        user['user_id'] = user_id
+        user['verifying_key'] = readable_pk
+        user['public_key'] = pub_key_hex
+
+    user_details['signing_key'] = readable_sk
+    user_details['verifying_key'] = readable_pk
+    user_details['private_key'] = priv_key_hex
+    user_details['public_key'] = pub_key_hex
 
 
-# to store the user details: 
-user_path = user_name + user_id + "details.json"
+    # this is the json file that the admin will have from which it will validate the users 
+    my_path = 'users.json'
 
-with open(user_path, 'w') as f: 
-    json.dump(user_details, f, indent = 4)
+    if path.exists(my_path):
+        with open(my_path , 'r') as file:
+            previous_json = json.load(file)
+            users = previous_json + users
+            
+    with open(my_path , 'w') as file:
+        json.dump(users, file, indent = 4)
 
 
-print("Registration completed")
+    # to store the user details: 
+    user_path = user_name + str(user_id) + "details.json"
+
+    with open(user_path, 'w') as f: 
+        json.dump(user_details, f, indent = 4)
